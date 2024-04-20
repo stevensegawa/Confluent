@@ -2,3 +2,5 @@ react-app/node_modules
 bot/envs.js
 bot/node_modules
 node_modules
+.DS_Store
+react-app/.DS_Store
