@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "puppeteer": "^22.6.5",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-stream": "^3.0.10"
+  },
+  "type": "commonjs"
+}
