@@ -3,20 +3,25 @@ const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const envs = require('../envs.js');
 const { launch, getStream, wss } = require("puppeteer-stream");
 const fs = require("fs");
-//const file = fs.createWriteStream(__dirname + "../data/test.webm");
+const filePath = './data/test.webm';
+const file = fs.createWriteStream(filePath);
+
 
 function delay(time) {
     return new Promise(function(resolve) { 
         setTimeout(resolve, time)
     });
- }
+}
 
 puppeteer.use(StealthPlugin());
-(async () => {
-    const browser = await puppeteer.launch({
-        headless: false,
-        args: ["--disable-notifications", "--mute-audio", "--enable-automation", '--use-fake-ui-for-media-stream'],
-        ignoreDefaultArgs: true
+const run = (async () => {
+    const browser = await launch({
+        ignoreDefaultArgs: ["--mute-audio"],
+        defaultViewport: {
+            width: 1920,
+            height: 1080,
+        },
+        channel: "chrome",
     });
 
     // going to sign-in page
@@ -35,15 +40,15 @@ puppeteer.use(StealthPlugin());
     await page.waitForSelector('input[type="email"]');
     await page.click('input[type="email"]');
     await navigationPromise;
-    await page.keyboard.type(`${envs.EMAIL}@gmail.com`, { delay: 300 + Math.floor(Math.random() * 10) });
+    await page.keyboard.type(`${envs.EMAIL}@gmail.com`, { delay: 100 + Math.floor(Math.random() * 10) });
     await delay(2000 + Math.floor(Math.random() * 50));
 
     await page.waitForSelector("#identifierNext");
     await page.click("#identifierNext");
 
     // typing out password
-    await delay(3500 + Math.floor(Math.random() * 50));
-    await page.keyboard.type(`${envs.PASSWORD}`, { delay: 200 + Math.floor(Math.random() * 10) });
+    await delay(3000 + Math.floor(Math.random() * 50));
+    await page.keyboard.type(`${envs.PASSWORD}`, { delay: 50 + Math.floor(Math.random() * 10) });
     await delay(800 + Math.floor(Math.random() * 40));
     await page.keyboard.press('Enter');
     await navigationPromise;
@@ -54,47 +59,47 @@ puppeteer.use(StealthPlugin());
     await page.waitForSelector('input[type="text"]');
     await page.click('input[type="text"]');
     await delay(1000 + Math.floor(Math.random() * 50));
-    await page.keyboard.type(`jdb-fkhp-mda`, { delay: 200 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
+    await page.keyboard.type(`ebb-pufb-wfo`, { delay: 200 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
     await delay(800 + Math.floor(Math.random() * 50));
     await page.keyboard.press('Enter');
     await navigationPromise;
 
     // turn off cam using Ctrl+E
-    await delay(8000 + Math.floor(Math.random() * 50));
+    await delay(7000 + Math.floor(Math.random() * 50));
     await page.keyboard.down('ControlLeft');
     await page.keyboard.press('KeyE');
     await page.keyboard.up('ControlLeft');
-    await delay(2000 + Math.floor(Math.random() * 50));
+    await delay(500 + Math.floor(Math.random() * 50));
 
     //turn off mic using Ctrl+D
-    await delay(1000 + Math.floor(Math.random() * 50));
+    await delay(500 + Math.floor(Math.random() * 50));
     await page.keyboard.down('ControlLeft');
     await page.keyboard.press('KeyD');
     await page.keyboard.up('ControlLeft');
-    await delay(2000 + Math.floor(Math.random() * 50));
+    await delay(1000 + Math.floor(Math.random() * 50));
     
     // Join Now
     var i;
     for (i=1; i<=10; i++) {
         await page.keyboard.press('Tab');
-        await delay(800 + Math.floor(Math.random() * 10));
+        await delay(500 + Math.floor(Math.random() * 10));
     }
     await page.keyboard.press('Enter');
     await navigationPromise;
 
     //listen in to audio
-    /*const stream = await getStream(page, { audio: true, video: true });
+    const stream = await getStream(page, { audio: true, video: false });
 	console.log("recording");
 
-	stream.pipe(file);
-	setTimeout(async () => {
+	stream.pipe(process.stdout);
+    setTimeout(async () => {
 		await stream.destroy();
-		file.close();
+		//file.close();
 		console.log("finished");
 
 		await browser.close();
 		(await wss).close();
-	}, 1000 * 120);*/
+	}, 1000 * 40);
+});
 
-
-})();
+run();
