@@ -16,6 +16,7 @@ const client = new speech.SpeechClient();
 const encoding = 'WEBM_OPUS';
 const sampleRateHertz = 16000;
 const languageCode = 'en-US';
+const transcripts = []
 
 function delay(time) {
     return new Promise(function(resolve) { 
@@ -31,62 +32,40 @@ const request = {
     interimResults: true, // If you want interim results, set this to true
 };
 
+const processData = ((dataResults) => {
+    let data = `${dataResults}`
+    if (data == 'END') {
+        console.log('END, press CTRL C');
+    } else {
+        console.log(data);
+        if (transcripts.length != 0) {
+            if (data.includes(transcripts[-1])) {
+                //has a repeat
+                if (data.length > transcripts[-1].length) {
+                    newWords = data.slice(transcripts[-1].length)
+                    //add the new words to transcript state
+                }
+            } else {
+                //not a repeat
+                //add to transcript state
+            }
+            transcripts.push(data)
+        }
+    }
+})
+
 const recognizeStream = client
   .streamingRecognize(request)
   .on('error', console.error)
   .on('data', data =>
-    process.stdout.write(
+    processData(
       data.results[0] && data.results[0].alternatives[0]
         ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
-        : '\n\nReached transcription time limit, press Ctrl+C\n'
+        : 'END'
     )
 );
 
-/*class InMemoryStream extends Writable {
-    constructor(options) {
-      super(options);
-      this.data = [];
-      this.startTime = null;
-      this.endTime = null;
-    }
-  
-    _write(chunk, encoding, callback) {
-      this.data.push(chunk);
-      callback();
-    }
-  
-    startMeasurement() {
-      this.startTime = performance.now();
-    }
-  
-    endMeasurement() {
-      this.endTime = performance.now();
-    }
-  
-    getElapsedTime() {
-      if (!this.startTime || !this.endTime) {
-        throw new Error('Measurement not started or ended');
-      }
-      return this.endTime - this.startTime;
-    }
-  }
-  
-  // Usage example
-  const inMemoryStream = new InMemoryStream();
-  
-  inMemoryStream.startMeasurement();
-  
-  // Simulate writing data chunks (adjust size and number for your test)
-  const chunkSize = 1024 * 1024; // 1 MB chunks
-  const numChunks = 100;
-  for (let i = 0; i < numChunks; i++) {
-    inMemoryStream.write(Buffer.alloc(chunkSize));
-  }
-  
-  inMemoryStream.endMeasurement();
-  
-  const elapsedTime = inMemoryStream.getElapsedTime();
-  console.log('In-memory stream write time:', elapsedTime, 'ms');*/
+
 
 
 puppeteer.use(StealthPlugin());
@@ -116,26 +95,26 @@ const run = (async () => {
     await page.waitForSelector('input[type="email"]');
     await page.click('input[type="email"]');
     await navigationPromise;
-    await page.keyboard.type(`${envs.EMAIL}@gmail.com`, { delay: 100 + Math.floor(Math.random() * 10) });
-    await delay(2000 + Math.floor(Math.random() * 50));
+    await page.keyboard.type(`${envs.EMAIL}@gmail.com`, { delay: 50 + Math.floor(Math.random() * 10) });
+    await delay(1000 + Math.floor(Math.random() * 50));
 
     await page.waitForSelector("#identifierNext");
     await page.click("#identifierNext");
 
     // typing out password
     await delay(3000 + Math.floor(Math.random() * 50));
-    await page.keyboard.type(`${envs.PASSWORD}`, { delay: 50 + Math.floor(Math.random() * 10) });
+    await page.keyboard.type(`${envs.PASSWORD}`, { delay: 20 + Math.floor(Math.random() * 10) });
     await delay(800 + Math.floor(Math.random() * 40));
     await page.keyboard.press('Enter');
     await navigationPromise;
 
     // going to Meet after signing in
-    await delay(4000 + Math.floor(Math.random() * 50));
+    await delay(3000 + Math.floor(Math.random() * 50));
     await page.goto("https://meet.google.com/");
     await page.waitForSelector('input[type="text"]');
     await page.click('input[type="text"]');
     await delay(1000 + Math.floor(Math.random() * 50));
-    await page.keyboard.type(`eeg-fehh-roy`, { delay: 200 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
+    await page.keyboard.type(`eeg-fehh-roy`, { delay: 100 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
     await delay(1500 + Math.floor(Math.random() * 50));
     await page.keyboard.press('Enter');
     await navigationPromise;
@@ -181,7 +160,7 @@ const run = (async () => {
 
 		await browser.close();
 		(await wss).close();
-	}, 1000 * 40);
+	}, 1000 * 45);
 });
 
-run();
+exports.runBot = run();

@@ -25,42 +25,9 @@ async function translateText(language, audio_to_text) {
     let text = "";
     for await (const chunk of result.stream) {
       const chunkText = chunk.text();
-      console.log(chunkText);
       text += chunkText;
     }
-    console.log(text);
   }
   
   translateText(language = "English", 
   audio_to_text = "日本は四季があり、春は桜が咲き、夏は緑が豊かになり、秋は紅葉が美しく、冬は雪景色が見られます");
-
-
-
-//Access your API key as an environment variable (see "Set up your API key" above)
-
-//     async function translateText(language, audio_to_text) {
-//         let prompt = ("Translate to " + language + ": " + audio_to_text);
-//         result = null;
-//         //Content Streaming! Allows us to achieve faster interactions by not waiting for the entire result, and instead use streaming to handle partial results.
-//         try {
-//             result = await model.generateContentStream(prompt)
-//         }
-//         catch (error){
-//             console.error("Error connecting to Google Generative AI:", error);
-//         }
-//         let text = '';
-//         for await (const chunk of result.stream) {
-//             const chunkText = chunk.text();
-//             console.log(chunkText);
-//             text += chunkText;
-//         }
-//         console.log("Final Translation:", text);  // Print final translation after all chunks
-//     }
-//     //...
-//     translateText(language = "English", audio_to_text = "日本は四季があり、春は桜が咲き、夏は緑が豊かになり、秋は紅葉が美しく、冬は雪景色が見られます")
-// catch (error) {
-//     console.error("Error connecting to Google Generative AI:", error);
-//      Handle the error here (e.g., display an error message, retry logic)
-//   }
-
-// ...
