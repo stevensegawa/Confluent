@@ -31,14 +31,4 @@ async function translateText(language, audio_to_text) {
   }
   
   translateText(language = "English", 
-  audio_to_text = `th
-  e aroma of freshlyBaked bread f
-  illed the kitchen as the golden loaves emerge
-  d from the oventhe curious child peered through the telescop
-  e her eyes wide with wonder as she gazed at the distant starsthe rhythmic so
-  und of rain pattered against thewindowpane creating a sense of peaceful tranquilitywith a determin
-  ed glint in his eye the athlete pUshed himself further during his grueling training sessi
-  onthe vibrant colors of the autumn leaves painted a brEathtaking landscape across the rolling h
-  illsthe melody of the violin serenaded the audience transporting Them to a world of emotional depththe aroma of fres
-  hly brewed coffee invigorated the sleepy office workers as they began their daYthe playful puppy chased its tail in circles its boundless energy radiating pure joythe wise elder shared stories of his life experiences offering valuable insights to the younger generationthe artist meticulously applied delicate brushs
-  trokes to the canvas bringing her creative vision to liFe`);
+  audio_to_text = `the aroma of freshlyBaked bread filled the kitchen as the golden loaves emerged from the oventhe curious child peered through the telescope her eyes wide with wonder as she gazed at the distant starsthe rhythmic sound of rain pattered against thewindowpane creating a sense of peaceful tranquilitywith a determined glint in his eye the athlete pUshed himself further during his grueling training sessionthe vibrant colors of the autumn leaves painted a brEathtaking landscape across the rolling hillsthe melody of the violin serenaded the audience transporting Them to a world of emotional depththe aroma of freshly brewed coffee invigorated the sleepy office workers as they began their daYthe playful puppy chased its tail in circles its boundless energy radiating pure joythe wise elder shared stories of his life experiences offering valuable insights to the younger generationthe artist meticulously applied delicate brushstrokes to the canvas bringing`);
