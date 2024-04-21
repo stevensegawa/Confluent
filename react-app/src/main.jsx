@@ -1,10 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ChatBox from '/type-ask-question.jsx'
+import Menu from './Menu.jsx'
+import Options from './Options.jsx'
+import Question from './Question.jsx'
+import Translation from './Translation.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ChatBox />
+    <Menu />
+    <Options />
+    <Question />
+    <Translation />
   </React.StrictMode>,
 )
