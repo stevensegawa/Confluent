@@ -9,14 +9,14 @@ const { Writable } = require('stream');
 const { performance } = require('perf_hooks')
 // Imports the Google Cloud client library
 const speech = require('@google-cloud/speech');
-
 // Creates a client
 const client = new speech.SpeechClient();
 
 const encoding = 'WEBM_OPUS';
 const sampleRateHertz = 16000;
 const languageCode = 'en-US';
-const transcripts = []
+const transcripts = [];
+const transcript = "";
 
 function delay(time) {
     return new Promise(function(resolve) { 
@@ -44,10 +44,12 @@ const processData = ((dataResults) => {
                 if (data.length > transcripts[-1].length) {
                     newWords = data.slice(transcripts[-1].length)
                     //add the new words to transcript state
+                    transcript += newWords;
                 }
             } else {
                 //not a repeat
                 //add to transcript state
+                transcript += data
             }
             transcripts.push(data)
         }

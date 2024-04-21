@@ -5,9 +5,9 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 //Access environmental variable Gemini API key. Make sure to put the file in Gitignore so that it stays private!
-const env = require("./envs.js")
+const env = require("../envs.js")
 
-const API_KEY=env.API_KEY  // For Unix-based systems (Linux, macOS)
+const API_KEY=envs.API_KEY  // For Unix-based systems (Linux, macOS)
 
 
 // Access your API key as an environment variable (see "Set up your API key" above)
