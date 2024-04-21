@@ -4,3 +4,4 @@ bot/node_modules
 node_modules
 .DS_Store
 react-app/.DS_Store
+envs.js
