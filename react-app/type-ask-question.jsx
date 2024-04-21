@@ -1,5 +1,11 @@
 //this function allows the user to type in a chat box and calls the trq.js function to ask a question regarding the prompt
 import React, { useState } from 'react';
+import askQuestion from "../trq.js"; // Replace with the actual path
+//import getTranslated from '../bot/src/index.js';
+
+import { translated_transcript } from "../bot/src/index.js";
+
+const answers = []
 
 const ChatBox = () => {
   const [message, setMessage] = useState('');
@@ -13,7 +19,8 @@ const ChatBox = () => {
     event.preventDefault();
     if (message.trim()) {
       // Send message to trq.js
-      await askQuestion(transcript, message, setResponse); // Pass setResponse for state update
+      await askQuestion(translated_transcript, message, setResponse); // Pass setResponse for state update
+      
   
       // Handle response (optional)
       if (response) {

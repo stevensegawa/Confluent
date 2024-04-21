@@ -3,18 +3,17 @@
 //console.log('Hello, World!');
 
 //Allow for Google Gen AI I think
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 //Access environmental variable Gemini API key. Make sure to put the file in Gitignore so that it stays private!
-const env = require("./envs.js")
-
-const API_KEY=env.API_KEY  // For Unix-based systems (Linux, macOS)
-
+//import env from "./bot/envs.js"
+import { API_KEY } from "./bot/envs.js";
+//const API_KEY=env.API_KEY  // For Unix-based systems (Linux, macOS)
 
 // Access your API key as an environment variable (see "Set up your API key" above)
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-async function askQuestion(transcript, question) {
+async function askQuestion(transcript, question, setResponse) {
     // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     const prompt = ("Answer this question: " + question + "\nGiven this meeting transcript: " + transcript);
@@ -33,7 +32,9 @@ async function askQuestion(transcript, question) {
         console.log(text); // Fallback to console logging if no state management
       }
     }
+    //module.exports() = askQuestion;
   }
+  export default askQuestion;
   
   // askQuestion(transcript = `(## Zoom Meeting Transcript - Project Brainstorming Session
 
