@@ -66,3 +66,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.chat-text-area {
+  color: black; /* Set text color to black */
+}
+
+.app-container {
+  margin: 0; /* Remove default margins */
+}
+

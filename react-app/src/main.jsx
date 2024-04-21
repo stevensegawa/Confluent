@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ChatBox from '/type-ask-question.jsx'
+import MyComponent from 'Menu.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ChatBox />
+    <MyComponent />
   </React.StrictMode>,
 )
