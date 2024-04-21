@@ -5,13 +5,89 @@ const { launch, getStream, wss } = require("puppeteer-stream");
 const fs = require("fs");
 const filePath = './data/test.webm';
 const file = fs.createWriteStream(filePath);
+const { Writable } = require('stream');
+const { performance } = require('perf_hooks')
+// Imports the Google Cloud client library
+const speech = require('@google-cloud/speech');
 
+// Creates a client
+const client = new speech.SpeechClient();
+
+const encoding = 'WEBM_OPUS';
+const sampleRateHertz = 16000;
+const languageCode = 'en-US';
 
 function delay(time) {
     return new Promise(function(resolve) { 
         setTimeout(resolve, time)
     });
 }
+const request = {
+    config: {
+        encoding: encoding,
+        sampleRateHertz: sampleRateHertz,
+        languageCode: languageCode,
+    },
+    interimResults: true, // If you want interim results, set this to true
+};
+
+const recognizeStream = client
+  .streamingRecognize(request)
+  .on('error', console.error)
+  .on('data', data =>
+    process.stdout.write(
+      data.results[0] && data.results[0].alternatives[0]
+        ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
+        : '\n\nReached transcription time limit, press Ctrl+C\n'
+    )
+);
+
+/*class InMemoryStream extends Writable {
+    constructor(options) {
+      super(options);
+      this.data = [];
+      this.startTime = null;
+      this.endTime = null;
+    }
+  
+    _write(chunk, encoding, callback) {
+      this.data.push(chunk);
+      callback();
+    }
+  
+    startMeasurement() {
+      this.startTime = performance.now();
+    }
+  
+    endMeasurement() {
+      this.endTime = performance.now();
+    }
+  
+    getElapsedTime() {
+      if (!this.startTime || !this.endTime) {
+        throw new Error('Measurement not started or ended');
+      }
+      return this.endTime - this.startTime;
+    }
+  }
+  
+  // Usage example
+  const inMemoryStream = new InMemoryStream();
+  
+  inMemoryStream.startMeasurement();
+  
+  // Simulate writing data chunks (adjust size and number for your test)
+  const chunkSize = 1024 * 1024; // 1 MB chunks
+  const numChunks = 100;
+  for (let i = 0; i < numChunks; i++) {
+    inMemoryStream.write(Buffer.alloc(chunkSize));
+  }
+  
+  inMemoryStream.endMeasurement();
+  
+  const elapsedTime = inMemoryStream.getElapsedTime();
+  console.log('In-memory stream write time:', elapsedTime, 'ms');*/
+
 
 puppeteer.use(StealthPlugin());
 const run = (async () => {
@@ -59,24 +135,24 @@ const run = (async () => {
     await page.waitForSelector('input[type="text"]');
     await page.click('input[type="text"]');
     await delay(1000 + Math.floor(Math.random() * 50));
-    await page.keyboard.type(`ebb-pufb-wfo`, { delay: 200 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
-    await delay(800 + Math.floor(Math.random() * 50));
+    await page.keyboard.type(`eeg-fehh-roy`, { delay: 200 + Math.floor(Math.random() * 10) });  // replace aaa-bbbb-ccc with the required Google Meet Code
+    await delay(1500 + Math.floor(Math.random() * 50));
     await page.keyboard.press('Enter');
     await navigationPromise;
 
     // turn off cam using Ctrl+E
-    await delay(7000 + Math.floor(Math.random() * 50));
+    await delay(8000 + Math.floor(Math.random() * 50));
     await page.keyboard.down('ControlLeft');
     await page.keyboard.press('KeyE');
     await page.keyboard.up('ControlLeft');
-    await delay(500 + Math.floor(Math.random() * 50));
+    await delay(100 + Math.floor(Math.random() * 50));
 
     //turn off mic using Ctrl+D
-    await delay(500 + Math.floor(Math.random() * 50));
+    await delay(100 + Math.floor(Math.random() * 50));
     await page.keyboard.down('ControlLeft');
     await page.keyboard.press('KeyD');
     await page.keyboard.up('ControlLeft');
-    await delay(1000 + Math.floor(Math.random() * 50));
+    await delay(400 + Math.floor(Math.random() * 50));
     
     // Join Now
     var i;
@@ -88,10 +164,16 @@ const run = (async () => {
     await navigationPromise;
 
     //listen in to audio
-    const stream = await getStream(page, { audio: true, video: false });
+    const audioConstraints = {
+        mandatory: {
+            bitsPerSecond: 128000,
+            sampleRate: 12000
+        }
+    };
+    const stream = await getStream(page, { audio: true, video: false, mimeType: "audio/webm;codecs=opus", audioBitsPerSecond: 128000, audioConstraints: audioConstraints });
 	console.log("recording");
 
-	stream.pipe(process.stdout);
+	stream.pipe(recognizeStream);
     setTimeout(async () => {
 		await stream.destroy();
 		//file.close();
